@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ais</title>
+
+  <style>
+    
+  </style>
+
+  
+</head>
+<body>
+  <!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบเสี่ยงเซียมซีออนไลน์</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 { color: #d32f2f; }
+        .cylinder {
+            font-size: 60px;
+            margin: 20px 0;
+            transition: transform 0.1s ease-in-out;
+        }
+        /* เอฟเฟกต์สั่นตอนเขย่า */
+        .shake {
+            animation: shakeEffect 0.5s infinite;
+        }
+        @keyframes shakeEffect {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        button {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        button:hover { background-color: #b71c1c; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .result-box {
+            margin-top: 25px;
+            padding: 15px;
+            border-top: 2px dashed #eee;
+            display: none;
+        }
+        .fortune-num { font-size: 20px; font-weight: bold; color: #d32f2f; }
+        .fortune-text { font-size: 16px; color: #333; margin-top: 10px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏮 เซียมซีเสี่ยงทาย </h1>
+    <div class="cylinder" id="cylinder">🥢</div>
+    <button id="shakeBtn" onclick="shakeSiamsi()">ตั้งจิตอธิษฐานแล้วเขย่า</button>
+
+    <div class="result-box" id="resultBox">
+        <div class="fortune-num" id="fortuneNum"></div>
+        <div class="fortune-text" id="fortuneText"></div>
+    </div>
+</div>
+
+<script>
+    // 1. คลังข้อมูลคำทำนายเซียมซี (สามารถเพิ่ม/แก้ไข ตรงนี้ได้เลย)
+    const fortuneDatabase = [
+        { num: 1, text: "ใบที่หนึ่งนี้หนาฟ้าเปิดทาง คิดสิ่งใดสมปรารถนา การงานราบรื่น ไร้อุปสรรคขัดขวาง คนโสดจะได้พบเนื้อคู่ในเร็ววัน" },
+        { num: 2, text: "ใบที่สองยังต้องรอคอย อย่าเพิ่งใจร้อนด่วนได้ ลาภผลยังอยู่ไกลตัว ช่วงนี้ให้หมั่นทำบุญตักบาตร แล้วเรื่องร้ายจะกลายเป็นดี" },
+        { num: 3, text: "ใบที่สามโชคลาภกำลังมา มีเกณฑ์ได้เงินก้อนโตจากความตั้งใจ การเจรจาค้าขายประสบความสำเร็จอย่างงดงาม" },
+        { num: 4, text: "ใบที่สี่ระวังเรื่องอารมณ์ อาจมีปากเสียงกับคนใกล้ชิด เงินทองพอมีพอกินแต่ไม่ควรให้ใครหยิบยืมในช่วงนี้" },
+        { num: 5, text: "ใบที่ห้าเปรียบเหมือนต้นไม้ใหญ่ที่กำลังผลิดอกออกผล สิ่งที่ลงทุนลงแรงไว้จะเริ่มเห็นผลสำเร็จ สุขภาพร่างกายแข็งแรงดี" }
+    ];
+
+    function shakeSiamsi() {
+        const cylinder = document.getElementById('cylinder');
+        const shakeBtn = document.getElementById('shakeBtn');
+        const resultBox = document.getElementById('resultBox');
+
+        // ซ่อนผลลัพธ์เก่าก่อน
+        resultBox.style.display = 'none';
+        
+        // เริ่มเอฟเฟกต์เขย่า และล็อกปุ่มไม่ให้กดซ้ำ
+        cylinder.classList.add('shake');
+        shakeBtn.disabled = true;
+        shakeBtn.innerText = "กำลังเขย่าดวงใจ...";
+
+        // หน่วงเวลา 1.5 วินาที เพื่อจำลองการเขย่าจริง
+        setTimeout(() => {
+            // หยุดเขย่า
+            cylinder.classList.remove('shake');
+            shakeBtn.disabled = false;
+            shakeBtn.innerText = "ตั้งจิตอธิษฐานแล้วเขย่า";
+
+            // สุ่มเลือกตัวเลขตามจำนวนในคลังข้อมูล
+            const randomIndex = Math.floor(Math.random() * fortuneDatabase.length);
+            const luckyFortune = fortuneDatabase[randomIndex];
+
+            // แสดงผลลัพธ์บนหน้าจอ
+            document.getElementById('fortuneNum').innerText = `🎯 ได้หมายเลข ${luckyFortune.num}`;
+            document.getElementById('fortuneText').innerText = luckyFortune.text;
+            resultBox.style.display = 'block';
+
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
+
+
+  <script>
+    
+  </script>
+</body>
+</html>
