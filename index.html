@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เกมแยกขยะ</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, "Noto Sans Thai", sans-serif;
+  background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+  min-height: 100vh;
+  color: #222;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 25px 15px;
+}
+
+.screen.active {
+  display: flex;
+}
+
+.container {
+  width: 100%;
+  max-width: 650px;
+  margin: auto;
+}
+
+/* หน้าเริ่มเกม */
+#startScreen {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.start-box {
+  background: white;
+  border-radius: 25px;
+  padding: 35px 25px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.logo {
+  font-size: 70px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin: 5px 0 15px;
+  font-size: 34px;
+  color: #168a45;
+}
+
+.subtitle {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.info {
+  background: #f1f8f4;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 20px 0;
+  line-height: 1.8;
+}
+
+.main-btn {
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background: #20a45a;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.main-btn:active {
+  transform: scale(0.97);
+}
+
+/* หน้าเกม */
+#gameScreen {
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.game-box {
+  width: 100%;
+  background: white;
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f7f5;
+  border-radius: 12px;
+  padding: 12px 15px;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.score {
+  color: #168a45;
+}
+
+.question-title {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.item {
+  text-align: center;
+  padding: 25px 10px;
+}
+
+.item-emoji {
+  font-size: 80px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.answer-btn {
+  border: none;
+  border-radius: 15px;
+  padding: 18px 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  min-height: 75px;
+  transition: 0.15s;
+}
+
+.answer-btn:active {
+  transform: scale(0.96);
+}
+
+.general {
+  background: #666;
+}
+
+.recycle {
+  background: #1976d2;
+}
+
+.organic {
+  background: #2e9d55;
+}
+
+.hazardous {
+  background: #d93636;
+}
+
+.answer-btn.disabled {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.feedback {
+  min-height: 55px;
+  margin-top: 18px;
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.correct {
+  background: #dff5e6;
+  color: #137333;
+}
+
+.wrong {
+  background: #ffe2e2;
+  color: #b3261e;
+}
+
+/* หน้าผลลัพธ์ */
+#resultScreen {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.result-box {
+  width: 100%;
+  background: white;
+  border-radius: 25px;
+  padding: 35px 25px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.result-icon {
+  font-size: 70px;
+}
+
+.final-score {
+  font-size: 48px;
+  font-weight: bold;
+  color: #168a45;
+  margin: 15px 0;
+}
+
+.result-text {
+  font-size: 19px;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 29px;
+  }
+
+  .answers {
+    grid-template-columns: 1fr;
+  }
+
+  .item-emoji {
+    font-size: 65px;
+  }
+
+  .item-name {
+    font-size: 21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ==================== หน้าเริ่มเกม ==================== -->
+<section id="startScreen" class="screen active">
+  <div class="container">
+    <div class="start-box">
+
+      <div class="logo">♻️</div>
+
+      <h1>เกมแยกขยะ</h1>
+
+      <div class="subtitle">
+        การพัฒนาเว็บไซต์เกมเพื่อส่งเสริมการเรียนรู้
+        การคัดแยกขยะในโรงเรียน
+      </div>
+
+      <div class="info">
+        🎮 เกมมีทั้งหมด <b>50 ข้อ</b><br>
+        ✅ ตอบถูก 1 ข้อ = <b>1 คะแนน</b><br>
+        🧠 เลือกถังขยะที่เหมาะสมกับขยะที่กำหนด
+      </div>
+
+      <button id="startBtn" class="main-btn">
+        ▶ เริ่มเกม
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== หน้าเกม ==================== -->
+<section id="gameScreen" class="screen">
+  <div class="container">
+
+    <div class="game-box">
+
+      <div class="top-bar">
+        <div id="questionNumber">ข้อ 1 / 50</div>
+        <div class="score">คะแนน: <span id="score">0</span></div>
+      </div>
+
+      <div class="question-title">
+        ขยะชิ้นนี้ควรใส่ถังไหน?
+      </div>
+
+      <div class="item">
+        <span id="itemEmoji" class="item-emoji">🧴</span>
+        <div id="itemName" class="item
